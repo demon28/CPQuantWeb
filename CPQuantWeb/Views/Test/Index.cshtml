@@ -33,6 +33,35 @@
     <script src="~/asserts/js/flot/jquery.flot.resize.min.js"></script>
     <script src="~/Scripts/jquery.form.js"></script>
     <script src="~/Scripts/knockout-2.2.0.js"></script>
+
+
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.css" />
+    <link rel="stylesheet" href="../components/font-awesome/css/font-awesome.css" />
+
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="../components/_mod/jquery-ui/jquery-ui.css" />
+
+    <!-- text fonts -->
+    <link rel="stylesheet" href="../assets/css/ace-fonts.css" />
+
+    <!-- ace styles -->
+    <link rel="stylesheet" href="../assets/css/ace.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+    <!--[if lte IE 9]>
+        <link rel="stylesheet" href="../assets/css/ace-part2.css" class="ace-main-stylesheet" />
+    <![endif]-->
+    <link rel="stylesheet" href="../assets/css/ace-skins.css" />
+    <link rel="stylesheet" href="../assets/css/ace-rtl.css" />
+
+    <!--[if lte IE 9]>
+      <link rel="stylesheet" href="../assets/css/ace-ie.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+    <script src="../assets/js/ace-extra.js"></script>
+
+
     <script type="text/javascript">
         $(function () {
             $('.easy-pie-chart.percentage').each(function () {
@@ -72,6 +101,7 @@
 
 <script src="~/js/System.js"></script>
 
+
 <table id="simple-table" class="table  table-bordered table-hover">
 
     <tr>
@@ -81,6 +111,31 @@
         </td>
         <td><a onclick="ToUpdate()"><span id="span_name"></span></a></td>
 
+        <td>
+ 
+         
+
+            <script src="~/datepicker/dist/js/bootstrap-datepicker.js"></script>
+            <script type="text/javascript" src="~/datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js" charset="UTF-8"></script>
+            <div class="input-group date datepicker">
+                <input type="text" class="form-control">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th "></span>
+                </div>
+            </div>
+
+
+            -
+
+            <div class="input-group date datepicker">
+                <input type="text" class="form-control">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th "></span>
+                </div>
+            </div>
+
+        </td>
+
         <td width="200px"><button class="btn btn-danger" id="btn_star">开 始</button></td>
 
     </tr>
@@ -88,60 +143,67 @@
 </table>
 
 
-    <script>
-        $(document).ready(function () {
+<script>
+    $(document).ready(function () {
 
-            Load();
-            
+        Load();
+
+    });
+
+    $("#btn_star").click(function () {
+
+        $.ajax({
+
+            url: "/Test/Star",
+            type: "POST",
+            data: { lid: GetQueryString("lid") },
+            success: function (result) {
+
+                alert(JSON.stringify(result));
+
+
+            }
         });
 
-        $("#btn_star").click(function () {
 
-            $.ajax({
+    });
 
-                url: "/Test/Star",
-                type: "POST",
-                data: { lid: GetQueryString("lid") },
-                success: function (result) {
+    function Load() {
 
-                    alert(JSON.stringify(result));
+        $.ajax({
+
+            url: "/Test/Load",
+            type: "POST",
+            data: { lid: GetQueryString("lid") },
+            success: function (result) {
+
+                $("#span_lid").html(result.lid);
+                $("#span_name").html(result.name);
 
 
-                }
-            });
-
-
+            }
         });
 
-        function Load() {
+    }
 
-            $.ajax({
+    function ToUpdate() {
 
-                url: "/Test/Load",
-                type: "POST",
-                data: { lid: GetQueryString("lid") },
-                success: function (result) {
+        window.location.href = "/Update/Index?lid=" + GetQueryString("lid");
 
-                    $("#span_lid").html(result.lid);
-                    $("#span_name").html(result.name);
-                  
-
-                }
-            });
-
-        }
-
-        function ToUpdate() {
-
-            window.location.href = "/Update/Index?lid=" + GetQueryString("lid");
-
-        }
+    }
 
 
-        function GetQueryString(name) {
-            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
-            var r = window.location.search.substr(1).match(reg);
-            if (r != null) return unescape(r[2]); return null;
-        }
+    function GetQueryString(name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return unescape(r[2]); return null;
+    }
 
-    </script>
+
+
+    $(function () {
+        $('.datepicker').datepicker({
+            language: 'zh-CN'
+        });
+    })
+</script>
