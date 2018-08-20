@@ -17,7 +17,8 @@ using Winner.Framework.Core;
 using Winner.Framework.Core.DataAccess;
 using Winner.Framework.Core.DataAccess.Oracle;
 using Winner.Framework.Utils;
-namespace Winner.YXH.S7500.DataAccess
+
+namespace CPQuantWeb.DataAccess
 {
     /// <summary>
     /// Data Access Layer Object Of Tcp_Clscript

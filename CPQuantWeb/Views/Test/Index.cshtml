@@ -1,0 +1,147 @@
+﻿
+@{
+    ViewBag.Title = "Test";
+}
+
+@{
+    ViewBag.Title = "CPQuant";
+    ViewBag.Controller = "Home";
+}
+@section breadcrumb{
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">
+            概览
+        </li>
+    </ul>
+}
+@section pageheader{
+}
+@section jquery_gritter_css{
+}
+@section customizeheader{
+    <script src="~/asserts/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="~/asserts/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/asserts/js/jquery.slimscroll.min.js"></script>
+    <script src="~/asserts/js/jquery.easy-pie-chart.min.js"></script>
+    <script src="~/asserts/js/jquery.sparkline.min.js"></script>
+    <script src="~/asserts/js/flot/jquery.flot.min.js"></script>
+    <script src="~/asserts/js/flot/jquery.flot.pie.min.js"></script>
+    <script src="~/asserts/js/flot/jquery.flot.resize.min.js"></script>
+    <script src="~/Scripts/jquery.form.js"></script>
+    <script src="~/Scripts/knockout-2.2.0.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $('.easy-pie-chart.percentage').each(function () {
+                var $box = $(this).closest('.infobox');
+                var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+                var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+                var size = parseInt($(this).data('size')) || 50;
+                $(this).easyPieChart({
+                    barColor: barColor,
+                    trackColor: trackColor,
+                    scaleColor: false,
+                    lineCap: 'butt',
+                    lineWidth: parseInt(size / 10),
+                    animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+                    size: size
+                });
+            })
+
+            $('.sparkline').each(function () {
+                var $box = $(this).closest('.infobox');
+                var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+                $(this).sparkline('html', { tagValuesAttribute: 'data-values', type: 'bar', barColor: barColor, chartRangeMin: $(this).data('min') || 0 });
+            });
+
+            $(".infobox").click(function () {
+                var href = $(this).attr("data-href");
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        })</script>
+    <style type="text/css">
+        .infobox-link { cursor: pointer; }
+            .infobox-link:hover { border: 1px solid #bbb; }
+    </style>
+}
+
+<script src="~/js/System.js"></script>
+
+<table id="simple-table" class="table  table-bordered table-hover">
+
+    <tr>
+
+        <td width="100px">
+            <span id="span_lid"></span>
+        </td>
+        <td><a onclick="ToUpdate()"><span id="span_name"></span></a></td>
+
+        <td width="200px"><button class="btn btn-danger" id="btn_star">开 始</button></td>
+
+    </tr>
+
+</table>
+
+
+    <script>
+        $(document).ready(function () {
+
+            Load();
+            
+        });
+
+        $("#btn_star").click(function () {
+
+            $.ajax({
+
+                url: "/Test/Star",
+                type: "POST",
+                data: { lid: GetQueryString("lid") },
+                success: function (result) {
+
+                    alert(JSON.stringify(result));
+
+
+                }
+            });
+
+
+        });
+
+        function Load() {
+
+            $.ajax({
+
+                url: "/Test/Load",
+                type: "POST",
+                data: { lid: GetQueryString("lid") },
+                success: function (result) {
+
+                    $("#span_lid").html(result.lid);
+                    $("#span_name").html(result.name);
+                  
+
+                }
+            });
+
+        }
+
+        function ToUpdate() {
+
+            window.location.href = "/Update/Index?lid=" + GetQueryString("lid");
+
+        }
+
+
+        function GetQueryString(name) {
+            var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+            var r = window.location.search.substr(1).match(reg);
+            if (r != null) return unescape(r[2]); return null;
+        }
+
+    </script>

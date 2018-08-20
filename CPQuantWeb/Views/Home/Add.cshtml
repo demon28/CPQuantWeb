@@ -1,0 +1,175 @@
+﻿
+@{
+    ViewBag.Title = "Add";
+}
+
+
+
+@section breadcrumb{
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">
+            概览
+        </li>
+    </ul>
+}
+
+@section pageheader{
+}
+@section jquery_gritter_css{
+}
+@section customizeheader{
+    <script src="~/asserts/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="~/asserts/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/asserts/js/jquery.slimscroll.min.js"></script>
+    <script src="~/asserts/js/jquery.easy-pie-chart.min.js"></script>
+    <script src="~/asserts/js/jquery.sparkline.min.js"></script>
+    <script src="~/asserts/js/flot/jquery.flot.min.js"></script>
+    <script src="~/asserts/js/flot/jquery.flot.pie.min.js"></script>
+    <script src="~/asserts/js/flot/jquery.flot.resize.min.js"></script>
+    <script src="~/Scripts/jquery.form.js"></script>
+    <script src="~/Scripts/knockout-2.2.0.js"></script>
+
+    <link href="~/codemirror/lib/codemirror.css" rel="stylesheet" />
+    <script src="~/codemirror/lib/codemirror.js"></script>
+
+
+    <script src="~/codemirror/mode/javascript/javascript.js"></script>
+
+    <script src="~/codemirror/keymap/vim.js"></script>
+
+    <link href="~/codemirror/addon/hint/show-hint.css" rel="stylesheet" />
+    <script src="~/codemirror/addon/hint/show-hint.js"></script>
+    <script src="~/codemirror/addon/hint/javascript-hint.js"></script>
+
+    <link href="~/codemirror/theme/3024-day.css" rel="stylesheet" />
+    <link href="~/codemirror/theme/eclipse.css" rel="stylesheet" />
+
+
+    <script src="~/js/System.js"></script>
+
+    <script type="text/javascript">
+        $(function () {
+            $('.easy-pie-chart.percentage').each(function () {
+                var $box = $(this).closest('.infobox');
+                var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
+                var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
+                var size = parseInt($(this).data('size')) || 50;
+                $(this).easyPieChart({
+                    barColor: barColor,
+                    trackColor: trackColor,
+                    scaleColor: false,
+                    lineCap: 'butt',
+                    lineWidth: parseInt(size / 10),
+                    animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
+                    size: size
+                });
+            })
+
+            $('.sparkline').each(function () {
+                var $box = $(this).closest('.infobox');
+                var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
+                $(this).sparkline('html', { tagValuesAttribute: 'data-values', type: 'bar', barColor: barColor, chartRangeMin: $(this).data('min') || 0 });
+            });
+
+            $(".infobox").click(function () {
+                var href = $(this).attr("data-href");
+                if (href) {
+                    window.location.href = href;
+                }
+            });
+        })</script>
+    <style type="text/css">
+        .infobox-link { cursor: pointer; }
+            .infobox-link:hover { border: 1px solid #bbb; }
+    </style>
+}
+
+
+
+策略名称： <input type="text" id="txt_name"  value="删一万策略"/> <input type="button" value="保存" id="btn_save" />
+<br />
+<br />
+<textarea id="code" name="code">
+function main()
+{     
+ 
+}
+
+</textarea>
+
+<script type="text/javascript">
+
+
+    document.addEventListener('keydown', function (e) {
+        if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
+            e.preventDefault();
+
+            if (confirm("确认保存吗") == true) {
+                $("#btn_save").click();
+            }
+        }
+    });
+
+    var code = document.getElementById('code');
+    var editor = CodeMirror.fromTextArea(code, {
+        mode: "text/javascript",
+        lineNumbers: true,
+        theme: "eclipse",
+        extraKeys: { "Ctrl-Q": "autocomplete"},
+        completeSingle: false,
+    });
+    editor.on("keyup", function (cm, name, Event) {
+
+        if (isShow(name.keyCode)) {
+            editor.showHint({ completeSingle: false });
+        } 
+    });
+
+
+
+
+    function isShow(z) {
+
+        if (z == "173" || z == "190" || z == "189" || z == "110" || z == "65" || z == "66" || z == "67" || z == "68" || z == "69" || z == "70" || z == "71" || z == "72" || z == "73" || z == "74" || z == "75" || z == "76" ||
+            z == "77" || z == "78" || z == "79" || z == "80" || z == "81" || z == "82" || z == "83" || z == "84" || z == "85" || z == "86" || z == "87" || z == "88" || z == "89" || z == "90") {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    $("#btn_save").click(function () {
+
+   
+
+        $.ajax({
+
+            url: "/Home/Insert",
+            type: "POST",
+            data: {
+                name: $("#txt_name").val(),
+                content: editor.getValue(),
+                remark: "Near"
+            },
+   
+        
+            success: function (result) {
+                if (!result.Success) {
+                    alert("添加失败！")
+                } else {
+                    alert("添加成功！")
+
+                }
+            }
+        });
+
+
+
+    });
+
+
+</script>
