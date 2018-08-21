@@ -55,7 +55,7 @@ namespace CPQuantWeb.Controllers
                 return SuccessResult();
             }
        
-            return FailResult("查询失败！");
+            return FailResult("修改失败！");
 
         }
 

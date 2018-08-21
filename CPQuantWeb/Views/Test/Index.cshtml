@@ -23,6 +23,8 @@
 @section jquery_gritter_css{
 }
 @section customizeheader{
+
+    <script src="~/asserts/js/jquery-2.0.3.min.js"></script>
     <script src="~/asserts/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="~/asserts/js/jquery.ui.touch-punch.min.js"></script>
     <script src="~/asserts/js/jquery.slimscroll.min.js"></script>
@@ -118,7 +120,7 @@
             <script src="~/datepicker/dist/js/bootstrap-datepicker.js"></script>
             <script type="text/javascript" src="~/datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js" charset="UTF-8"></script>
             <div class="input-group date datepicker">
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="input_d1">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th "></span>
                 </div>
@@ -128,7 +130,7 @@
             -
 
             <div class="input-group date datepicker">
-                <input type="text" class="form-control">
+                <input type="text" class="form-control" id="input_d2">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th "></span>
                 </div>
@@ -147,7 +149,11 @@
 
 
 
-<span id="scriptcode" style="display:none"></span>
+@*<span id="scriptcode" style="display:none"></span>*@
+<textarea  id="scriptcode" style="height:100px;width:100%"></textarea>
+<textarea id="listnumber" type="text" style="height:100px;width:100%"></textarea>
+
+
 <br />
 <br />
 <br />
@@ -179,23 +185,38 @@
 
 
 <script>
+
+    var mydate = new Date();
     $(document).ready(function () {
 
         Load();
         $("#dynamic-table").hide();
-
+        $("#input_d1").val(mydate.toLocaleDateString());
+        $("#input_d2").val(mydate.toLocaleDateString());
     });
 
     $("#btn_star").click(function () {
 
         $("#dynamic-table").show();
 
+        
+        var code = $("#scriptcode").val();
 
-        var code = $("#scriptcode").html();
-      
+
+
+
+
+
+
+
         $.globalEval(code);
-        $.globalEval("main()");
 
+        $.globalEval(" var list=main();");
+        
+        $.globalEval("$('#listnumber').val(JSON.stringify(list)); ");
+
+        var listnumber = $("#listnumber").val();
+        
 
     });
 
@@ -210,8 +231,8 @@
 
                 $("#span_lid").html(result.lid);
                 $("#span_name").html(result.name);
-                $("#scriptcode").html(result.content);
-                
+                //$("#scriptcode").html(result.content);
+                $("#scriptcode").val(result.content);
 
             }
         });
@@ -235,7 +256,8 @@
 
     $(function () {
         $('.datepicker').datepicker({
-            language: 'zh-CN'
+            language: 'zh-CN',
+
         });
     })
 </script>

@@ -1,0 +1,55 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+
+    <script src="../asserts/js/jquery-1.10.2.min.js"></script>
+    <script src="../asserts/js/jquery-2.0.3.min.js"></script>
+    <script src="../asserts/js/jquery-ui-1.10.3.full.min.js"></script>
+  
+
+    <script src="/js/System.js"></script>
+
+    <script type="text/javascript">
+
+
+        function main() {
+            var baselist = GetBase();
+
+            var mylist = [];
+
+
+            for (var i = 0; i < baselist.length; i++) {
+                //去除5个一模一样的号码00000
+                if (baselist[i].n1 == baselist[i].n2 && baselist[i].n1 == baselist[i].n3 && baselist[i].n1 == baselist[i].n4 && baselist[i].n1 == baselist[i].n5) {
+                    continue;
+                }
+
+                //去除前面四个一样的号码00001
+                if (baselist[i].n1 == baselist[i].n2 && baselist[i].n1 == baselist[i].n3 && baselist[i].n1 == baselist[i].n4) {
+                    continue;
+                }
+                //去除后面四个一样的号码10000
+                if (baselist[i].n2 == baselist[i].n3 && baselist[i].n2 == baselist[i].n4 && baselist[i].n2 == baselist[i].n5) {
+                    continue;
+                }
+
+
+                var code = baselist[i].n1 + "," + baselist[i].n2 + "," + baselist[i].n3 + "," + baselist[i].n4 + "," + baselist[i].n5;
+                var item = { 'n1': baselist[i].n1, 'n2': baselist[i].n2, 'n3': baselist[i].n3, 'n4': baselist[i].n4, 'n5': baselist[i].n5, 'code': code };
+                mylist.push(item);
+
+            }
+           
+            return mylist;
+
+        }
+        document.write(JSON.stringify(main()));
+       
+    </script>
+    <title></title>
+</head>
+<body>
+
+</body>
+</html>

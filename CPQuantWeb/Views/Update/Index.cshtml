@@ -98,7 +98,7 @@
 
 
 
-策略名称： <input type="text" id="txt_name" value="" /> <input type="button" value="保存" id="btn_save" />
+策略名称： <input type="text" id="txt_name" value="" /> <input type="button" value="保存" id="btn_save" /> <input type="button" value="回测" id="btn_huice" />
 <br />
 <br />
 <textarea id="code2" name="code2">
@@ -153,6 +153,10 @@
 
 
         Load();
+        $("#btn_huice").click(function () {
+
+            window.location.href = "/Test/Index?lid=" + GetQueryString("lid");
+        });
 
     });
 

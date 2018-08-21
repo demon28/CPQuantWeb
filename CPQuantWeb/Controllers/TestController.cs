@@ -71,5 +71,7 @@ namespace CPQuantWeb.Controllers
             return FailResult();
 
         }
+
+    
     }
 }
