@@ -91,6 +91,43 @@ namespace CPQuantWeb.Controllers
 
         }
 
+        [HttpPost]
+        public ActionResult HuiCe()
+        {
+
+            int cid = int.Parse(Request.Form["cid"]);
+            string json = Request.Form["json"];
+            List<NumberModel> listnumbers = JsonProvider.JsonTo<List<NumberModel>>(json);
+
+            CPQuantWeb.DataAccess.Tcp_Hiscode tcp = new DataAccess.Tcp_Hiscode();
+            
+            if (tcp.SelectByPK(cid))
+            {
+                string[] sl = tcp.Opencode.Split(',');
+                NumberModel number = new NumberModel();
+                number.N1 = int.Parse(sl[0]);
+                number.N2 = int.Parse(sl[1]);
+                number.N3 = int.Parse(sl[2]);
+                number.N4 = int.Parse(sl[3]);
+                number.N5 = int.Parse(sl[4]);
+
+                if (listnumbers.Contains(number))
+                {
+                    return SuccessResult("true");
+                }
+                return SuccessResult("false");
+                
+            }
+            return FailResult("回测失败");
+
+        }
+
+
+
+
+
+
+
 
 
 

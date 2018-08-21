@@ -150,12 +150,18 @@
 
 
 @*<span id="scriptcode" style="display:none"></span>*@
-<textarea  id="scriptcode" style="height:100px;width:100%"></textarea>
+<textarea id="scriptcode" style="height:100px;width:100%"></textarea><br /><br />
 <textarea id="listnumber" type="text" style="height:100px;width:100%"></textarea>
 
 
 <br />
 <br />
+中奖次数：<span id="sp_lotCount"></span> &nbsp;&nbsp;
+下注次数：<span id="sp_setCount"></span> &nbsp;&nbsp;
+花费金额：<span id="sp_spendamont"></span> &nbsp;&nbsp;
+中奖金额：<span id="sp_suceamont"></span> &nbsp;&nbsp;
+
+
 <br />
 <table id="dynamic-table" class="table table-striped table-bordered table-hover">
     <thead>
@@ -169,17 +175,8 @@
             <th>中奖金额</th>
         </tr>
     </thead>
-    <tbody data-bind="foreach: records">
-        <tr>
-            <td data-bind="text: cid">   </td>
-            <td data-bind="text: expect">   </td>
-            <td data-bind="text: opencode"> </td>
-            <td data-bind="text: opendate"></td>
-            <td data-bind="text: islottery"> </td>
-            <td data-bind="text: setamount"> </td>
-            <td data-bind="text: getamount"> </td>
-
-        </tr>
+    <tbody>
+        <tr></tr>
     </tbody>
 </table>
 
@@ -199,24 +196,79 @@
 
         $("#dynamic-table").show();
 
-        
+
         var code = $("#scriptcode").val();
 
+        var startime = $("#input_d1").val();
+        var endtime = $("#input_d2").val();
+        var hisjson;
+        $.ajax({
+
+            url: "/Test/GetHis",
+            type: "POST",
+            data: { stardate: startime, enddate: endtime },
+            success: function (result) {
+
+                if (!result.Success) {
+                    alert("没有回测数据，请同步数据！");
+                    return false;
+                }
+
+                hisjson = result.Content;
+
+            }
+        });
+
+        var lotCount = 0;
+        var setCount = 0;
+        var spendamont = 0;
+        var suceamont = 0;
+
+        for (var i = 0; i < hisjson.length; i++) {
+
+            $.globalEval(code);
+
+            $.globalEval(" var list=main();");
+
+            $.globalEval("$('#listnumber').val(JSON.stringify(list)); ");
+
+            var listnumber = $("#listnumber").val();
+
+            setCount = setCount + 1;
+            spendamont = spendamont+ hisjson.length * 0.001;
+            $.ajax({
+
+                url: "/Test/GetHis",
+                type: "POST",
+                data: { cid: hisjson[i].cid, json: listnumber },
+                success: function (result) {
+
+                    if (!result.Success) {
+                        alert(result.Message);
+                        return false;
+                    }
+
+                    var isres = "未中奖";
+                    if (result.Message == "true") {
+                        isres = "中奖啦";
+                        lotCount = lotCount + 1;
+                        suceamont = suceamont + 95;
+                    }
+                    var setamount = hisjson.length * 0.001;
+                    var getamount = 95 - setamount;
+                    var row = "<tr><td>" + hisjson[i].cid + "</td><td>" + hisjson[i].expect + "</td><td>" + hisjson[i].opencode + "</td><td>" + hisjson[i].datetime + "</td><td>" + isres + "</td><td>" + setamount + "</td><td>" + getamount + "</td></tr>";
+
+                    $("#dynamic-table").append(row);
+
+                }
+            });
+
+
+        }
 
 
 
 
-
-
-
-        $.globalEval(code);
-
-        $.globalEval(" var list=main();");
-        
-        $.globalEval("$('#listnumber').val(JSON.stringify(list)); ");
-
-        var listnumber = $("#listnumber").val();
-        
 
     });
 
