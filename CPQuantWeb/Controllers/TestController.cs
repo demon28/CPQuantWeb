@@ -72,6 +72,27 @@ namespace CPQuantWeb.Controllers
 
         }
 
-    
+        [HttpPost]
+        public ActionResult GetHis()
+        {
+
+            DateTime stardate =DateTime.Parse( Request.Form["stardate"]);
+            DateTime enddate= DateTime.Parse(Request.Form["enddate"]);
+
+            CPQuantWeb.DataAccess.Tcp_HiscodeCollection tcp = new DataAccess.Tcp_HiscodeCollection();
+            string sql = "SELECT t.* FROM tcp_hiscode t WHERE t.datetime < to_date('"+ enddate.ToString("yyyy-MM-dd")+ "', 'yyyy-MM-dd')  AND t.datetime > to_date('" + stardate.ToString("yyyy-MM-dd") + "',yyyy-MM-dd)";
+          
+            if (tcp.ListBySQL(sql))
+            {
+                var list = MapProvider.Map<HisCodeModel>(tcp.DataTable);
+                return SuccessResultList(list, tcp.ChangePage);
+            }
+            return FailResult();
+
+        }
+
+
+
+
     }
 }
