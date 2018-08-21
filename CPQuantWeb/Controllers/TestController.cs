@@ -58,15 +58,17 @@ namespace CPQuantWeb.Controllers
         public ActionResult Last() {
 
             string cid = Request.Form["cid"];
+            string count = Request.Form["count"];
 
-            CPQuantWeb.DataAccess.Tcp_Hiscode tcp = new DataAccess.Tcp_Hiscode();
-            string sql = "SELECT t.* FROM  tcp_hiscode t WHERE t.cid=(select c.p from (select cid,lead(cid,1,0)  over (order by cid) as p from tcp_hiscode) c where c.cid='"+ cid + "') ";
+            CPQuantWeb.DataAccess.Tcp_HiscodeCollection tcp = new DataAccess.Tcp_HiscodeCollection();
+            string sql = "SELECT s.* FROM (SELECT t.*,rownum FROM  tcp_hiscode t WHERE t.cid >"+cid+" ORDER BY t.cid ASC) s WHERE rownum < "+count;
 
-            if (tcp.SelectSQL(sql))
+            if (tcp.ListBySQL(sql))
             {
-                return SuccessResult(tcp.Opencode); 
+                var list = MapProvider.Map<HisCodeModel>(tcp.DataTable);
+                return SuccessResultList(list, tcp.ChangePage);
             }
-            return FailResult(tcp.Opencode);
+            return FailResult();
 
         }
     }

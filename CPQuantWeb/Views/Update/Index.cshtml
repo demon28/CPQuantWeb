@@ -48,6 +48,15 @@
     <link href="~/codemirror/theme/3024-day.css" rel="stylesheet" />
     <link href="~/codemirror/theme/eclipse.css" rel="stylesheet" />
 
+
+    <!--支持代码折叠-->
+    <link rel="stylesheet" href="~/codemirror/addon/fold/foldgutter.css" />
+    <script src="~/codemirror/addon/fold/foldcode.js"></script>
+    <script src="~/codemirror/addon/fold/foldgutter.js"></script>
+    <script src="~/codemirror/addon/fold/brace-fold.js"></script>
+    <script src="~/codemirror/addon/fold/comment-fold.js"></script>
+
+
     <script src="~/js/System.js"></script>
 
     <script type="text/javascript">
@@ -89,7 +98,7 @@
 
 
 
-策略名称： <input type="text" id="txt_name"  value=""/> <input type="button" value="保存" id="btn_save" />
+策略名称： <input type="text" id="txt_name" value="" /> <input type="button" value="保存" id="btn_save" />
 <br />
 <br />
 <textarea id="code2" name="code2">
@@ -104,7 +113,7 @@
         if (e.keyCode == 83 && (navigator.platform.match("Mac") ? e.metaKey : e.ctrlKey)) {
             e.preventDefault();
 
-                $("#btn_save").click();
+            $("#btn_save").click();
         }
     });
 
@@ -115,21 +124,24 @@
         theme: "eclipse",
         extraKeys: { "Ctrl-Q": "autocomplete" },
         completeSingle: false,
+        lineWrapping: true,	//代码折叠
+        //foldGutter: true,
+        //gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
     });
 
     editor.on("keyup", function (cm, name, Event) {
 
         if (isShow(name.keyCode)) {
-       
+
             editor.showHint({ completeSingle: false });
         }
     });
 
-
+    editor.setSize("1200", "800");
 
     function isShow(z) {
 
-        if ( z == "173" || z == "190" || z == "189" || z == "110" || z == "65" || z == "66" || z == "67" || z == "68" || z == "69" || z == "70" || z == "71" || z == "72" || z == "73" || z == "74" || z == "75" || z == "76" ||
+        if (z == "173" || z == "190" || z == "189" || z == "110" || z == "65" || z == "66" || z == "67" || z == "68" || z == "69" || z == "70" || z == "71" || z == "72" || z == "73" || z == "74" || z == "75" || z == "76" ||
             z == "77" || z == "78" || z == "79" || z == "80" || z == "81" || z == "82" || z == "83" || z == "84" || z == "85" || z == "86" || z == "87" || z == "88" || z == "89" || z == "90") {
             return true;
         } else {
@@ -153,9 +165,9 @@
 
             url: "/Update/Load",
             type: "POST",
-            data: { lid: GetQueryString("lid")},
+            data: { lid: GetQueryString("lid") },
             success: function (result) {
-             
+
                 $("#txt_name").val(result.name);
 
                 editor.setValue(result.content)
@@ -172,16 +184,16 @@
 
         $.ajax({
 
-            url: "/Update/Update" ,
+            url: "/Update/Update",
             type: "POST",
             data: {
-                lid:GetQueryString("lid"),
+                lid: GetQueryString("lid"),
                 name: $("#txt_name").val(),
                 content: editor.getValue(),
                 remark: "Near"
             },
-   
-        
+
+
             success: function (result) {
                 if (!result.Success) {
                     alert("修改失败！")

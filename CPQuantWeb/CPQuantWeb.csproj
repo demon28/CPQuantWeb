@@ -349,7 +349,6 @@
     <Content Include="codemirror\addon\tern\tern.js" />
     <Content Include="codemirror\addon\tern\worker.js" />
     <Content Include="codemirror\addon\wrap\hardwrap.js" />
-    <Content Include="codemirror\bin\upload-release.js" />
     <Content Include="codemirror\index.html" />
     <Content Include="codemirror\keymap\emacs.js" />
     <Content Include="codemirror\keymap\sublime.js" />
@@ -982,10 +981,6 @@
     <Content Include="codemirror\.npmignore" />
     <Content Include="codemirror\.travis.yml" />
     <Content Include="codemirror\AUTHORS" />
-    <Content Include="codemirror\bin\authors.sh" />
-    <Content Include="codemirror\bin\lint" />
-    <Content Include="codemirror\bin\release" />
-    <Content Include="codemirror\bin\source-highlight" />
     <Content Include="codemirror\CHANGELOG.md" />
     <Content Include="codemirror\CONTRIBUTING.md" />
     <Content Include="codemirror\LICENSE" />

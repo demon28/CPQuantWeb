@@ -32,7 +32,7 @@ namespace CPQuantWeb.Controllers
 
         }
 
-
+        [ValidateInput(false)]
         public ActionResult Update()
         {
 

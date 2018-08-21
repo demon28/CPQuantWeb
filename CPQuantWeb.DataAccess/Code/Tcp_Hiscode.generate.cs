@@ -243,7 +243,7 @@ WHERE " + condition;
             get { return Tcp_Hiscode._TABLENAME; }
         }
         
-        protected bool ListByCondition(string condition)
+        public bool ListByCondition(string condition)
         {
             string sql = @"
 SELECT
@@ -269,7 +269,13 @@ WHERE " + condition;
             string condition = "1=1";
             return ListByCondition(condition);
         }
-        
+
+        public bool ListBySQL(string sql)
+        {
+            return base.ListBySql(sql);
+        }
+
+
         public bool DeleteByCondition(string condition)
         {
             string sql = "DELETE FROM TCP_HISCODE WHERE " + condition;
