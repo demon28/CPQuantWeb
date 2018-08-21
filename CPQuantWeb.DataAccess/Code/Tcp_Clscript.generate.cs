@@ -150,7 +150,7 @@ VALUES(
 			return UpdateByCondition(string.Empty);
         }
 		
-        protected bool UpdateByCondition(string condition)
+        public bool UpdateByCondition(string condition)
         {
             string sql = @"UPDATE Tcp_Clscript SET
  NAME=:NAME,
@@ -167,7 +167,7 @@ WHERE LID=:LID ";
             return base.UpdateBySql(sql);
         }
 
-        protected bool SelectByCondition(string condition)
+        public bool SelectByCondition(string condition)
         {
             string sql = @"
 SELECT
@@ -187,10 +187,13 @@ WHERE " + condition;
             return SelectByCondition(condition);
         }
 
-
+        public bool SelectSQL(string sql)
+        {
+            return base.SelectBySql(sql);
+        }
 
         #endregion 常用方法
-        
+
         //提示：此类由代码生成器生成，如无特殊情况请不要更改。如要扩展请在外部同名类中扩展
     }
     

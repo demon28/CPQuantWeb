@@ -112,8 +112,8 @@
         <td><a onclick="ToUpdate()"><span id="span_name"></span></a></td>
 
         <td>
- 
-         
+
+
 
             <script src="~/datepicker/dist/js/bootstrap-datepicker.js"></script>
             <script type="text/javascript" src="~/datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js" charset="UTF-8"></script>
@@ -142,28 +142,59 @@
 
 </table>
 
+<br />
+
+
+
+
+<span id="scriptcode" style="display:none"></span>
+<br />
+<br />
+<br />
+<table id="dynamic-table" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th class="center"> ID</th>
+            <th>期数</th>
+            <th>开奖号码</th>
+            <th>开奖时间</th>
+            <th>中奖结果</th>
+            <th>下注金额</th>
+            <th>中奖金额</th>
+        </tr>
+    </thead>
+    <tbody data-bind="foreach: records">
+        <tr>
+            <td data-bind="text: cid">   </td>
+            <td data-bind="text: expect">   </td>
+            <td data-bind="text: opencode"> </td>
+            <td data-bind="text: opendate"></td>
+            <td data-bind="text: islottery"> </td>
+            <td data-bind="text: setamount"> </td>
+            <td data-bind="text: getamount"> </td>
+
+        </tr>
+    </tbody>
+</table>
+
 
 <script>
     $(document).ready(function () {
 
         Load();
+        $("#dynamic-table").hide();
 
     });
 
     $("#btn_star").click(function () {
 
-        $.ajax({
-
-            url: "/Test/Star",
-            type: "POST",
-            data: { lid: GetQueryString("lid") },
-            success: function (result) {
-
-                alert(JSON.stringify(result));
+        $("#dynamic-table").show();
 
 
-            }
-        });
+        var code = $("#scriptcode").html();
+      
+        $.globalEval(code);
+        $.globalEval("main()");
 
 
     });
@@ -179,7 +210,8 @@
 
                 $("#span_lid").html(result.lid);
                 $("#span_name").html(result.name);
-
+                $("#scriptcode").html(result.content);
+                
 
             }
         });

@@ -18,6 +18,7 @@ namespace CPQuantWeb.Controllers
             return View();
         }
 
+        [HttpPost]
         public ActionResult Load()
         {
             int lid = int.Parse(Request.Form["lid"]);
@@ -34,25 +35,39 @@ namespace CPQuantWeb.Controllers
 
         }
 
-        public async Task<ActionResult> Star()
+        [HttpPost]
+        public ActionResult  Star()
         {
 
 
-            //int lid = int.Parse(Request.Form["lid"]);
+            int lid = int.Parse(Request.Form["lid"]);
 
-            //CPQuantWeb.DataAccess.Tcp_Clscript tcp = new DataAccess.Tcp_Clscript();
+            CPQuantWeb.DataAccess.Tcp_Clscript tcp = new DataAccess.Tcp_Clscript();
 
-            //if (!tcp.SelectByPK(lid))
-            //{
-            //    return FailResult("查询失败！");
-            //}
+            if (!tcp.SelectByPK(lid))
+            {
+                return FailResult("查询失败！");
+            }
 
-       
-            //var res=  await JSHelper.RunJSAsync("");
-
-            Task.Run((Action)JSHelper.RunJSAsync).Wait();
 
             return SuccessResult();
+        }
+
+
+        [HttpPost]
+        public ActionResult Last() {
+
+            string cid = Request.Form["cid"];
+
+            CPQuantWeb.DataAccess.Tcp_Hiscode tcp = new DataAccess.Tcp_Hiscode();
+            string sql = "SELECT t.* FROM  tcp_hiscode t WHERE t.cid=(select c.p from (select cid,lead(cid,1,0)  over (order by cid) as p from tcp_hiscode) c where c.cid='"+ cid + "') ";
+
+            if (tcp.SelectSQL(sql))
+            {
+                return SuccessResult(tcp.Opencode); 
+            }
+            return FailResult(tcp.Opencode);
+
         }
     }
 }

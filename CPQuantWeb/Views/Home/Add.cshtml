@@ -121,6 +121,7 @@ function main()
         theme: "eclipse",
         extraKeys: { "Ctrl-Q": "autocomplete"},
         completeSingle: false,
+
     });
     editor.on("keyup", function (cm, name, Event) {
 
@@ -128,7 +129,6 @@ function main()
             editor.showHint({ completeSingle: false });
         } 
     });
-
 
 
 
