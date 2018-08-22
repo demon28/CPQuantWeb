@@ -33,7 +33,7 @@ namespace CPQuantWeb.Controllers
         [HttpPost]
         public ActionResult Insert()
         {
-            CPQuantWeb.DataAccess.Tcp_Clscript tcp = new DataAccess.Tcp_Clscript();
+            Tcp_Clscript tcp = new DataAccess.Tcp_Clscript();
             tcp.Name = Request.Form["name"];
             tcp.Content = Request.Form["content"];
             tcp.Remark = Request.Form["remark"];

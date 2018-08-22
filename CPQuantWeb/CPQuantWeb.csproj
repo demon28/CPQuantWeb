@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="ClearScript, Version=5.5.2.0, Culture=neutral, PublicKeyToken=935d0c957da47c73, processorArchitecture=MSIL">
+      <HintPath>..\packages\ClearScript.V8.5.5.2\lib\net45\ClearScript.dll</HintPath>
+    </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <HintPath>..\packages\winner.log.1.0.0\lib\log4net.dll</HintPath>
     </Reference>
@@ -283,6 +286,7 @@
     <Content Include="asserts\js\x-editable\bootstrap-editable.min.js" />
     <Content Include="asserts\myajaxpager.css" />
     <Content Include="asserts\pagination.js" />
+    <Content Include="ClearScriptV8-32.dll" />
     <Content Include="codemirror\.gitattributes" />
     <Content Include="codemirror\addon\comment\comment.js" />
     <Content Include="codemirror\addon\comment\continuecomment.js" />
@@ -880,6 +884,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="js\cycle.js" />
     <Content Include="js\dist\css\bootstrap-datepicker.css" />
     <Content Include="js\dist\css\bootstrap-datepicker.min.css" />
     <Content Include="js\dist\css\bootstrap-datepicker.standalone.css" />
@@ -971,7 +976,12 @@
     <Content Include="js\dist\locales\bootstrap-datepicker.vi.min.js" />
     <Content Include="js\dist\locales\bootstrap-datepicker.zh-CN.min.js" />
     <Content Include="js\dist\locales\bootstrap-datepicker.zh-TW.min.js" />
+    <Content Include="js\json2.js" />
+    <Content Include="js\json_parse.js" />
+    <Content Include="js\json_parse_state.js" />
     <Content Include="js\System.js" />
+    <Content Include="Licenses\clearscript-license.txt" />
+    <Content Include="Licenses\v8-license.txt" />
     <Content Include="Scripts\ai.0.15.0-build58334.js" />
     <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -1027,6 +1037,8 @@
     <Content Include="Scripts\respond.min.js" />
     <None Include="Scripts\_references.js" />
     <Content Include="Ceshi.html" />
+    <Content Include="v8-base-ia32.dll" />
+    <Content Include="v8-ia32.dll" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -1128,6 +1140,10 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.2.4.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
