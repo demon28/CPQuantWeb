@@ -1014,6 +1014,7 @@
     <Content Include="datepicker\less\datepicker.less" />
     <Content Include="datepicker\less\datepicker3.less" />
     <Content Include="log4net.config" />
+    <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

@@ -18,8 +18,24 @@ namespace CPQuantWeb.Facade
 
             if (tcp.ListBySQL(sql))
             {
-                string json = JsonProvider.ToJson(tcp.DataTable);
-                return json;
+                List<NumberModel> numbers = new List<NumberModel>();
+
+                for (int i = 0; i < tcp.DataTable.Rows.Count; i++)
+                {
+                    NumberModel number = new NumberModel();
+                    string[] sl= tcp.DataTable.Rows[i]["opencode"].ToString().Split(',');
+                    number.N1 = int.Parse(sl[0]);
+                    number.N2 = int.Parse(sl[1]);
+                    number.N3 = int.Parse(sl[2]);
+                    number.N4 = int.Parse(sl[3]);
+                    number.N5 = int.Parse(sl[4]);
+                    numbers.Add(number);
+                }
+
+                JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
+                jsSerializer.MaxJsonLength = Int32.MaxValue;
+
+                return jsSerializer.Serialize(numbers);
 
             }
             return "[]";
