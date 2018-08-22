@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Script.Serialization;
 using Winner.Framework.MVC.Controllers;
 using Winner.Framework.Utils;
 
@@ -41,7 +42,7 @@ namespace CPQuantWeb.Controllers
         }
 
         [HttpPost]
-        public ActionResult  Star()
+        public ActionResult Star()
         {
 
 
@@ -65,12 +66,12 @@ namespace CPQuantWeb.Controllers
         public ActionResult GetHis()
         {
 
-            DateTime stardate =DateTime.Parse( Request.Form["stardate"]);
-            DateTime enddate= DateTime.Parse(Request.Form["enddate"]).AddDays(1);
+            DateTime stardate = DateTime.Parse(Request.Form["stardate"]);
+            DateTime enddate = DateTime.Parse(Request.Form["enddate"]).AddDays(1);
 
             CPQuantWeb.DataAccess.Tcp_HiscodeCollection tcp = new DataAccess.Tcp_HiscodeCollection();
-            string sql = "SELECT t.* FROM tcp_hiscode t WHERE t.datetime < to_date('"+ enddate.ToString("yyyy-MM-dd")+ "', 'yyyy-MM-dd')  AND t.datetime > =to_date('" + stardate.ToString("yyyy-MM-dd") + "','yyyy-MM-dd')";
-          
+            string sql = "SELECT t.* FROM tcp_hiscode t WHERE t.datetime < to_date('" + enddate.ToString("yyyy-MM-dd") + "', 'yyyy-MM-dd')  AND t.datetime > =to_date('" + stardate.ToString("yyyy-MM-dd") + "','yyyy-MM-dd')";
+
             if (tcp.ListBySQL(sql))
             {
                 var list = MapProvider.Map<HisCodeModel>(tcp.DataTable);
@@ -85,7 +86,7 @@ namespace CPQuantWeb.Controllers
         {
 
             int cid = int.Parse(Request.Form["cid"]); //期号
-            string runjs = Request.Form["js"];
+
             int lid = int.Parse(Request.Form["lid"]);
 
 
@@ -97,11 +98,11 @@ namespace CPQuantWeb.Controllers
             }
 
 
-            List<NumberModel> listnumbers =RunjsGetList(runjs,tcp.Content, cid);
+            List<RunJSNumberModel> listnumbers = RunjsGetList(tcp.Content, cid);
 
             CPQuantWeb.DataAccess.Tcp_Hiscode tcphis = new DataAccess.Tcp_Hiscode();
-            
-            if (tcp.SelectByPK(cid))
+
+            if (tcphis.SelectByPK(cid))
             {
                 string[] sl = tcphis.Opencode.Split(',');
                 NumberModel number = new NumberModel();
@@ -111,20 +112,24 @@ namespace CPQuantWeb.Controllers
                 number.N4 = int.Parse(sl[3]);
                 number.N5 = int.Parse(sl[4]);
 
-                if (listnumbers.Contains(number))
+                foreach (var item in listnumbers)
                 {
-                    return SuccessResult("true");
+                    if (item.N1 == number.N1 && item.N2 == number.N2 && item.N3 == number.N3 && item.N4 == number.N4 && item.N5 == number.N5)
+                    {
+                        return SuccessResult(listnumbers.Count);
+                    }
+
                 }
-                return SuccessResult("false");
-                
+                return SuccessResult("0");
+
             }
             return FailResult("回测失败");
 
         }
 
-        public List<NumberModel> RunjsGetList(string runjs,string celu,int qihao)
+        public List<RunJSNumberModel> RunjsGetList(string celu, int qihao)
         {
-            List<NumberModel> numberModels = new List<NumberModel>();
+            List<RunJSNumberModel> numberModels = new List<RunJSNumberModel>();
 
             StringBuilder stringBuilder = new StringBuilder();
 
@@ -143,17 +148,22 @@ namespace CPQuantWeb.Controllers
             try
             {
 
-            
-            using (Microsoft.ClearScript.ScriptEngine engine = new Microsoft.ClearScript.V8.V8ScriptEngine())
-            {
-                
-                engine.AddHostObject("Lottery", new CPQuantWeb.Facade.Lottery());
-                engine.Execute(stringBuilder.ToString());
 
-                var s = engine.Script.main(qihao);
+                using (Microsoft.ClearScript.ScriptEngine engine = new Microsoft.ClearScript.V8.V8ScriptEngine())
+                {
+
+                    engine.AddHostObject("Lottery", new CPQuantWeb.Facade.Lottery());
+                    engine.Execute(stringBuilder.ToString());
+
+                    var s = engine.Script.main(qihao);
+
+                    JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
+                    jsSerializer.MaxJsonLength = Int32.MaxValue;
+
+                    return jsSerializer.Deserialize<List<RunJSNumberModel>>(s);
 
 
-              }
+                }
 
             }
             catch (Exception e)
@@ -162,13 +172,11 @@ namespace CPQuantWeb.Controllers
                 throw;
             }
 
-            return numberModels;
+
+
         }
 
-
     }
-
-
   
 
     

@@ -45,10 +45,10 @@ namespace CPQuantWeb.Facade
                             {
                                 NumberModel number = new NumberModel();
                                 number.N1 = i;
-                                number.N1 = j;
-                                number.N1 = k;
-                                number.N1 = l;
-                                number.N1 = z;
+                                number.N2 = j;
+                                number.N3 = k;
+                                number.N4 = l;
+                                number.N5 = z;
 
                                 numbers.Add(number);
                             }

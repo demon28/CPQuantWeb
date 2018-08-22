@@ -121,18 +121,20 @@
 
             <script src="~/datepicker/dist/js/bootstrap-datepicker.js"></script>
             <script type="text/javascript" src="~/datepicker/dist/locales/bootstrap-datepicker.zh-CN.min.js" charset="UTF-8"></script>
-            <div class="input-group date datepicker">
+            开始时间：  <div class="input-group date datepicker">
                 <input type="text" class="form-control" id="input_d1">
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th "></span>
                 </div>
+
             </div>
 
 
             -
 
-            <div class="input-group date datepicker">
-                <input type="text" class="form-control" id="input_d2">
+            结束时间：   <div class="input-group date datepicker">
+
+                <input type="text" class="form-control" id="input_d2"  >
                 <div class="input-group-addon">
                     <span class="glyphicon glyphicon-th "></span>
                 </div>
@@ -146,7 +148,6 @@
 
 </table>
 
-<br />
 
 
 
@@ -154,8 +155,7 @@
 <textarea id="listnumber" type="text" style="height:100px;width:100%;display:none"></textarea>
 
 
-<br />
-<br />
+
 
 <div id="div_info">
     中奖次数：<span id="sp_lotCount"></span> &nbsp;&nbsp;
@@ -197,6 +197,9 @@
         $("#input_d2").val(mydate.toLocaleDateString());
     });
 
+    var hisjson;
+  
+    
     $("#btn_star").click(function () {
 
         $("#dynamic-table").show();
@@ -205,7 +208,7 @@
 
         var startime = $("#input_d1").val();
         var endtime = $("#input_d2").val();
-        var hisjson;
+  
         $.ajax({
 
             url: "/Test/GetHis",
@@ -217,81 +220,78 @@
                     alert("没有回测数据，请同步数据！");
                     return false;
                 }
-            
 
                 hisjson = result.Content.Data;
+            
 
+            
+
+          
            
-
                 var lotCount = 0;
                 var setCount = 0;
+            
                 var spendamont = 0;
                 var suceamont = 0;
 
-
-                $.ajax({
-
-                    url: "/Test/HuiCe",
-                    type: "POST",
-                    data: {
-                        cid: hisjson[0].cid,
-                        js: "main(5288)",
-                        lid: GetQueryString("lid"),
-                    },
-                    success: function (result) {
-
-             
-                    }
-                });
-
-
-          
-                /*
                 for (var i = 0; i < hisjson.length; i++) {
 
-              
-                    var runjs = "main('" + hisjson[i].cid + "');";
+                    setCount = setCount + 1;
+               
+                    ((function (i) {
+                     
+                     
+                       
 
-                    setCount = setCount + 1;  //记录下注册次数
-                    spendamont = spendamont + hisjson.length * 0.001;
-                    $.ajax({
+                        $.ajax({
 
-                        url: "/Test/HuiCe",
-                        type: "POST",
-                        data: {
-                            cid: hisjson[i].cid,
-                            js: runjs,
-                            lid: GetQueryString("lid"),
-                        },
-                        success: function (result) {
+                            url: "/Test/HuiCe",
+                            type: "POST",
+                            data: {
+                                cid: hisjson[i].cid,
 
-                            if (!result.Success) {
-                                alert(result.Message);
-                                return false;
+                                lid: GetQueryString("lid"),
+                            },
+                            success: function (result) {
+
+                        
+
+                                if (!result.Success) {
+                                    alert(result.Message);
+                                    return false;
+                                }
+
+                           
+                                var setamount = parseFloat((result.Content * 0.001).toFixed(4));
+                                var getamount = parseFloat((95 - setamount).toFixed(4));;
+
+
+                                var isres = "未中奖";
+                                if (result.Content != "0") {
+                                    isres = "中奖啦";
+                                    lotCount = lotCount + 1;
+                                    suceamont = parseFloat((suceamont + getamount).toFixed(4));
+                                } 
+                                spendamont = parseFloat((spendamont + setamount).toFixed(4));
+                         
+                               
+                                var row = "<tr><td>" + hisjson[i].cid + "</td><td>" + hisjson[i].expect + "</td><td>" + hisjson[i].opencode + "</td><td>" + hisjson[i].datetime + "</td><td>" + isres + "</td><td><span style='color:green'>" + setamount + "</span></td><td><span style='color:red'>" + getamount + "</span></td></tr>";
+
+                                $("#dynamic-table").append(row);
+
+
+                             
+
+                                $("#sp_lotCount").html(lotCount);
+                                $("#sp_setCount").html(setCount);
+                                $("#sp_spendamont").html(spendamont);
+                                $("#sp_suceamont").html(suceamont);
                             }
+                        });
 
-                            var isres = "未中奖";
-                            if (result.Message == "true") {
-                                isres = "中奖啦";
-                                lotCount = lotCount + 1;
-                                suceamont = suceamont + 95;
-                            }
-                            var setamount = hisjson.length * 0.001;
-                            var getamount = 95 - setamount;
-                            var row = "<tr><td>" + hisjson[i].cid + "</td><td>" + hisjson[i].expect + "</td><td>" + hisjson[i].opencode + "</td><td>" + hisjson[i].datetime + "</td><td>" + isres + "</td><td>" + setamount + "</td><td>" + getamount + "</td></tr>";
-
-                            $("#dynamic-table").append(row);
-                          
-
-                            $("#sp_lotCount").html(lotCount);
-                            $("#sp_setCount").html(setCount);
-                            $("#sp_lotCount").html(spendamont);
-                            $("#sp_suceamont").html(suceamont);
-                        }
-                    });
-
-
-                }*/
+                    }(i)));
+                  
+                }
 
             }
         });
