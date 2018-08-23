@@ -143,11 +143,7 @@ function main()
     }
 
     $("#btn_save").click(function () {
-
-   
-
         $.ajax({
-
             url: "/Home/Insert",
             type: "POST",
             data: {
@@ -155,8 +151,6 @@ function main()
                 content: editor.getValue(),
                 remark: "Near"
             },
-   
-        
             success: function (result) {
                 if (!result.Success) {
                     alert("添加失败！")
@@ -166,9 +160,6 @@ function main()
                 }
             }
         });
-
-
-
     });
 
 
