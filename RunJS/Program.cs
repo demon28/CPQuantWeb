@@ -1,4 +1,5 @@
 ﻿
+using CPQuantWeb.Entites;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +12,15 @@ namespace RunJS
     {
         static void Main(string[] args)
         {
-         
+            CPQuantWeb.Facade.Lottery lottery = new CPQuantWeb.Facade.Lottery();
+
+
+
         }
 
-  
+
+       
+
+
     }
 }

@@ -49,5 +49,19 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CPQuantWeb.DataAccess\CPQuantWeb.DataAccess.csproj">
+      <Project>{9532606c-62da-47e2-9ef4-c53f4c81327d}</Project>
+      <Name>CPQuantWeb.DataAccess</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CPQuantWeb.Entites\CPQuantWeb.Entites.csproj">
+      <Project>{1df2759b-5ec0-4ad9-8da5-a164332d217b}</Project>
+      <Name>CPQuantWeb.Entites</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CPQuantWeb.Facade\CPQuantWeb.Facade.csproj">
+      <Project>{b0ca9622-4a96-4dd1-b1d1-6e6ec5261260}</Project>
+      <Name>CPQuantWeb.Facade</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

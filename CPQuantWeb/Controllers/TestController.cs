@@ -97,8 +97,18 @@ namespace CPQuantWeb.Controllers
                 return FailResult("获取策略脚本失败！");
             }
 
+            ReturnJson json = RunjsGetList(tcp.Content, cid);
+            List<NumberModel> listnumbers = new List<NumberModel>();
+            if (json.type=="log")
+            {
+                JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
+                jsSerializer.MaxJsonLength = Int32.MaxValue;
 
-            List<RunJSNumberModel> listnumbers = RunjsGetList(tcp.Content, cid);
+                return FailResult(json.log);
+
+            }
+            listnumbers = json.list;
+
 
             CPQuantWeb.DataAccess.Tcp_Hiscode tcphis = new DataAccess.Tcp_Hiscode();
 
@@ -127,7 +137,7 @@ namespace CPQuantWeb.Controllers
 
         }
 
-        public List<RunJSNumberModel> RunjsGetList(string celu, int qihao)
+        public ReturnJson RunjsGetList(string celu, int qihao)
         {
             List<RunJSNumberModel> numberModels = new List<RunJSNumberModel>();
 
@@ -160,7 +170,7 @@ namespace CPQuantWeb.Controllers
                     JavaScriptSerializer jsSerializer = new JavaScriptSerializer();
                     jsSerializer.MaxJsonLength = Int32.MaxValue;
 
-                    return jsSerializer.Deserialize<List<RunJSNumberModel>>(s);
+                    return jsSerializer.Deserialize<ReturnJson>(s);
 
 
                 }
@@ -169,7 +179,10 @@ namespace CPQuantWeb.Controllers
             catch (Exception e)
             {
 
-                throw;
+                ReturnJson returnJson = new ReturnJson();
+                returnJson.type = "log";
+                returnJson.log = e.ToString();
+                return returnJson;
             }
 
 

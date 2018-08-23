@@ -6,6 +6,17 @@ using System.Threading.Tasks;
 
 namespace CPQuantWeb.Entites
 {
+
+    public class ReturnJson
+    {
+        public string type { get; set; }
+        public List<NumberModel> list{get;set;}
+        public string log { get; set; }
+        public string message { get; set; }
+    }
+
+
+
     public class NumberModel
     {
         public int N1 { get; set; }
